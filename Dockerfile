@@ -11,8 +11,7 @@ RUN yum install -y MariaDB-server MariaDB-client
 ADD config/my.cnf /etc/my.cnf
 
 # All the MariaDB data that you'd want to backup will be redirected here
-RUN mkdir /data
-VOLUME ["/data/mariadb"]
+VOLUME ["/data"]
 
 # Port 3306 is where MariaDB listens on
 EXPOSE 3306
@@ -22,7 +21,7 @@ EXPOSE 3306
 ADD config/mariadb-start.sh /opt/bin/mariadb-start.sh 
 ADD config/mariadb-setup.sql /opt/bin/mariadb-setup.sql
 RUN chmod u=rwx /opt/bin/mariadb-start.sh
-RUN chown mysql:mysql /opt/bin/mariadb-start.sh /opt/bin/mariadb-setup.sql /data/mariadb
+RUN chown mysql:mysql /opt/bin/mariadb-start.sh /opt/bin/mariadb-setup.sql
 
 # run all subsequent commands as the mysql user
 USER mysql
