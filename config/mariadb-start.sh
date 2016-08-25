@@ -2,6 +2,8 @@
 
 # if the /data/mariadb directory doesn't contain anything, then initialise it
 directory="/data/mariadb/data"
+mkdir -p $directory
+
 if [ ! "$(ls -A $directory)" ]; then
     /usr/bin/mysql_install_db --datadir=/data/mariadb/data --user=mysql
     cp /opt/bin/mariadb-setup.sql /tmp/combined.sql

@@ -5,7 +5,7 @@ MAINTAINER "Dylan Lindgren" <dylan.lindgren@gmail.com>
 # Install MariaDB
 ADD config/MariaDB.repo /etc/yum.repos.d/MariaDB.repo
 RUN yum update -y
-RUN yum install -y MariaDB-server MariaDB-client
+RUN yum install -y libreadline-compat MariaDB-server MariaDB-client
 
 # Configure MariaDB
 ADD config/my.cnf /etc/my.cnf
@@ -18,12 +18,11 @@ EXPOSE 3306
 
 # These scripts will be used to launch MariaDB and configure it
 # securely if no data exists in /data/mariadb
+ADD config/mariadb-init.sh /opt/bin/mariadb-init.sh 
 ADD config/mariadb-start.sh /opt/bin/mariadb-start.sh 
 ADD config/mariadb-setup.sql /opt/bin/mariadb-setup.sql
 RUN chmod u=rwx /opt/bin/mariadb-start.sh
+RUN chmod u=rwx /opt/bin/mariadb-init.sh
 RUN chown mysql:mysql /opt/bin/mariadb-start.sh /opt/bin/mariadb-setup.sql
 
-# run all subsequent commands as the mysql user
-USER mysql
-
-ENTRYPOINT ["/opt/bin/mariadb-start.sh"]
+ENTRYPOINT ["/opt/bin/mariadb-init.sh"]
